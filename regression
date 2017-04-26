@@ -1,0 +1,33 @@
+title: "April22Lab"
+output: html_notebook
+---
+
+#LOAD ALL YOUR LIBRARIES AND DATA FIRST
+
+```{r}
+library(aws.s3)
+library('lehmansociology')
+library(ggplot2)
+library(dplyr)
+library(lsr)
+s3load('gss.Rda', bucket = 'lehmansociologydata')
+```
+```{r}
+#Look at the mean of an interval variable
+mean(GSS$childs, na.rm=TRUE)
+```
+```{r}
+# This is a generalized linear model of an interval variable with just an intercept, no independent variable
+results<-glm(GSS$childs~1, data=GSS)
+summary(results)
+```
+
+```{r}
+# This is a generalized linear model of an interval variable with  an intercept and an independent variable
+results<-glm(GSS$childs~age, data=GSS)
+summary(results)
+#The line below gives us a scatterplot with a "best fitting line" through it.
+ggplot(GSS, aes(age, childs)) + geom_point() +	stat_smooth(method="lm") +
+ggtitle("Figure 1. The Relationship between Age and Number of Children") + 
+labs(y="Number of Children", x="Age")
+```
